@@ -6,28 +6,41 @@ import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.ArrowDropDown
+import androidx.compose.material.icons.filled.ExpandCircleDown
 import androidx.compose.material.icons.filled.Home
+import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material.icons.outlined.School
 import androidx.compose.material.icons.outlined.Settings
+import androidx.compose.material.icons.rounded.Add
 import androidx.compose.material.icons.rounded.Home
 import androidx.compose.material.icons.rounded.HomeWork
 import androidx.compose.material.icons.rounded.House
+import androidx.compose.material.icons.rounded.KeyboardArrowDown
 import androidx.compose.material.icons.rounded.School
 import androidx.compose.material.icons.rounded.Search
 import androidx.compose.material.icons.rounded.Sell
 import androidx.compose.material.icons.rounded.Settings
+import androidx.compose.material.icons.twotone.KeyboardArrowDown
 import androidx.compose.material3.BottomAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -36,6 +49,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SearchBar
 import androidx.compose.material3.SearchBarColors
 import androidx.compose.material3.SearchBarDefaults
+import com.example.marketingapp.ui.theme.Text
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -46,6 +60,7 @@ import androidx.compose.runtime.traceEventEnd
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -57,9 +72,18 @@ import com.example.marketingapp.ui.theme.BackgroundWhite
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.graphics.PathEffect
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.sp
+import com.example.marketingapp.data.DocumentData
+import com.example.marketingapp.data.processIDdata
+import com.example.marketingapp.ui.components.FirstCard
+import com.example.marketingapp.ui.components.FlowListComponent
+import com.example.marketingapp.ui.components.ProcessCardComponent
+import com.example.marketingapp.ui.components.processList
+import com.example.marketingapp.ui.theme.BadgeGreen
 
-@OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
 fun HomeScreen(modifier: Modifier = Modifier) {
 
@@ -85,20 +109,34 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 
             TitleComponent()
 
-            Spacer(modifier = Modifier.height(24.dp))
+            Spacer(modifier = Modifier.height(32.dp))
 
             LazyRow(
-                modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.spacedBy(16.dp)
+                modifier.fillMaxWidth()
             ) {
                 item {
                     FirstCard()
                 }
-
+                items(processList) { process ->
+                    ProcessCardComponent(process)
+                }
             }
-            //spacer
-            //FlowListComponent
-            //spacer
+
+            Spacer(modifier = Modifier.height(32.dp))
+
+            FlowListComponent()
+
+            Spacer(modifier = Modifier.height(15.dp))
+
+            LazyColumn(
+                Modifier
+                    .fillMaxSize()
+                    .padding(horizontal = 24.dp)
+            ) {
+                items(DocumentsList) { Documents ->
+                    DocumentListComponent(Documents)
+                }
+            }
             //DocumentListComponent()
         }
 
@@ -106,31 +144,85 @@ fun HomeScreen(modifier: Modifier = Modifier) {
 }
 
 @Composable
-fun FirstCard(modifier: Modifier = Modifier) {
+fun DocumentListComponent(Documents: DocumentData) {
 
-    Box(modifier = Modifier
-        .width(120.dp)
-        .height(96.dp)
-        .padding(start = 24.dp)
-        .background(BackgroundWhite, shape = RoundedCornerShape(12.dp))
-        .drawBehind {
-            drawRoundRect(
-                color = Color.Gray,
-                cornerRadius = CornerRadius(12.dp.toPx()),
-                style = Stroke(
-                    width = 3f,
-                    pathEffect = PathEffect.dashPathEffect(
-                        floatArrayOf(10f, 10f), 0f
+    Column {
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(80.dp),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(
+                modifier = Modifier.weight(1f),
+                verticalArrangement = Arrangement.spacedBy(4.dp)
+            ) {
+                Text(
+                    text = Documents.title,
+                    style = TextStyle(
+                        fontSize = 20.sp,
+                        color = Color.Black,
+                        fontWeight = FontWeight.Bold
                     )
                 )
-            )
-        },
-        contentAlignment = Alignment.Center
-    ){
-        //column
+                Text(
+                    text = Documents.timeStamp,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        color = Color.Gray, fontWeight = FontWeight.Bold
+                    )
+                )
+            }
+            IconButton(
+                onClick = { /*TODO*/ },
+                modifier = Modifier.background(color = BadgeGreen, shape = CircleShape)
+            ) {
+                Icon(imageVector = Icons.Rounded.Add, contentDescription = null, tint = Color.Black)
+            }
+        }
+        HorizontalDivider(
+            modifier = Modifier.fillMaxWidth(),
+            thickness = 1.dp,
+            color = Color.LightGray
+        )
     }
 
 }
+
+
+val DocumentsList = listOf(
+    DocumentData(
+        id = 0,
+        title = "Document verificartion",
+        timeStamp = "3 min ago"
+    ),
+    DocumentData(
+        id = 1,
+        title = "Newbie onboarding",
+        timeStamp = "5 days ago"
+    ),
+    DocumentData(
+        id = 2,
+        title = "Team Meeting Notes",
+        timeStamp = "2 hours ago"
+    ),
+    DocumentData(
+        id = 3,
+        title = "Client Feedback Summary",
+        timeStamp = "1 day ago"
+    ),
+    DocumentData(
+        id = 4,
+        title = "Budget Allocation Report",
+        timeStamp = "3 days ago"
+    ),
+    DocumentData(
+        id = 5,
+        title = "Product Launch Plan",
+        timeStamp = "1 week ago"
+    )
+)
+
 
 @Preview(showBackground = true)
 @Composable
