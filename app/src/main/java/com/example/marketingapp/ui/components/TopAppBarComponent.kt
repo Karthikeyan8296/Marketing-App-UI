@@ -34,7 +34,7 @@ fun TopAppBarComponent() {
         modifier = Modifier
             .fillMaxWidth()
             .padding(horizontal = 24.dp)
-            .padding(top = 48.dp),
+            .padding(top = 50.dp),
         verticalAlignment = Alignment.CenterVertically
     ) {
         Column(horizontalAlignment = Alignment.Start, modifier = Modifier.weight(1f)) {
@@ -42,14 +42,14 @@ fun TopAppBarComponent() {
                 text = "Welcome back,",
                 style = TextStyle(
                     fontSize = 14.sp,
-                    fontWeight = FontWeight.SemiBold,
+                    fontWeight = FontWeight.Medium,
                     color = Color.Gray
                 )
             )
             Text(
                 text = "Carolina Terner",
                 style = TextStyle(
-                    fontSize = 18.sp,
+                    fontSize = 22.sp,
                     color = Color.Black,
                     fontWeight = FontWeight.SemiBold
                 )
