@@ -119,7 +119,7 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                 item {
                     FirstCard()
                 }
-                items(processList) { process ->
+                items(items = processList, key = {it.value}) { process ->
                     ProcessCardComponent(process)
                 }
             }
@@ -135,14 +135,17 @@ fun HomeScreen(modifier: Modifier = Modifier) {
                     .fillMaxSize()
                     .padding(horizontal = 24.dp)
             ) {
-                items(DocumentsList) { Documents ->
+                items(items = DocumentsList,
+                    key = {
+                        it.value
+                    }
+                ) { Documents ->
                     DocumentListComponent(Documents)
                 }
             }
         }
     }
 }
-
 
 
 @Preview(showBackground = true)
